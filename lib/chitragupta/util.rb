@@ -16,7 +16,7 @@ module Chitragupta
 
     def called_as_rack_server?
       # Check if its called using rack up and Rack server is defined to log for rack
-      return File.basename($PROGRAM_NAME) == "rackup" && defined?(Rack::Server)
+      return Gem.loaded_specs.has_key?('thin')
     end
 
     def called_as_sidekiq?
@@ -42,7 +42,7 @@ module Chitragupta
       data[:data][:request][:id] = current_payload["REQUEST_ID"] rescue nil #TBD
       data[:data][:request][:user_id] = message[:user_id] rescue nil #TBD
       data[:data][:request][:params] = Chitragupta.payload["input_params"].to_s
-      data[:data][:request][:header] = nil # couldn't find where to put in headers?
+      data[:data][:request][:headers] = nil # couldn't find where to put in headers?
 
       data[:data][:response][:status] = message[:status] rescue nil
       data[:data][:response][:duration] = message[:duration] rescue nil
