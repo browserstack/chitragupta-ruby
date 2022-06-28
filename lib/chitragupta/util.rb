@@ -51,8 +51,27 @@ module Chitragupta
       data[:meta][:format][:version] = Chitragupta::FormatVersions::SERVER
       data[:meta][:host] = Socket.gethostname #TBD
 
+      if not data[:meta].has_key?(:component)
+        data[:meta][:component] = Chitragupta.payload['component'] rescue nil
+      end
+      if not data[:meta].has_key?(:application)
+        data[:meta][:application] = Chitragupta.payload['application'] rescue nil
+      end
+      if not data[:meta].has_key?(:team)
+        data[:meta][:team] = Chitragupta.payload['team'] rescue nil
+      end
+      if not data[:meta].has_key?(:release_version)
+        data[:meta][:release_version] = Chitragupta.payload['release_version'] rescue nil
+      end
+
       data[:log][:id] ||= message["log_id"] rescue nil #TBD
       data[:log][:uuid] = Chitragupta.payload["sessionid"]
+      if not data[:log].has_key?(:kind)
+        data[:log][:kind] = Chitragupta.payload['kind'] rescue nil
+      end
+      if not data[:log].has_key?(:dynamic_data)
+        data[:log][:dynamic_data] = Chitragupta.payload['dynamic_data'] rescue nil
+      end
     end
 
     def populate_ruby_server_data(data, message)

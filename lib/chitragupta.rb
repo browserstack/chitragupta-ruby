@@ -40,14 +40,8 @@ module Chitragupta
             server_log[:status] = status.to_s[0..3]
             server_log[:duration] = now - began_at
             server_log[:meta] = {}
-            server_log[:meta][:component] = "desktop"
-            server_log[:meta][:application] = "desktopterminal"
             server_log[:meta][:file] = @logger.instance_variable_get(:@logdev).filename rescue nil
-            server_log[:meta][:team] = "desktop"
-            server_log[:meta][:release_version] = "v1.0"
             server_log[:log] = {}
-            server_log[:log][:kind] = "DESKTOP_TERMINAL_LOGS"
-            server_log[:log][:dynamic_data] = ""
             @logger.info(server_log)
         end
     end
