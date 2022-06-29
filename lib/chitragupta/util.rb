@@ -51,13 +51,13 @@ module Chitragupta
       data[:meta][:format][:version] = Chitragupta::FormatVersions::SERVER
       data[:meta][:host] = Socket.gethostname #TBD
 
-      if not data[:meta].has_key?(:component)
+      if not data[:meta].has_key?(:component) and data[:meta][:component].nil?
         data[:meta][:component] = Chitragupta.payload['component'] rescue nil
       end
-      if not data[:meta].has_key?(:application)
+      if not data[:meta].has_key?(:application) and data[:meta][:application].nil?
         data[:meta][:application] = Chitragupta.payload['application'] rescue nil
       end
-      if not data[:meta].has_key?(:team)
+      if not data[:meta].has_key?(:team) and data[:meta][:team].nil?
         data[:meta][:team] = Chitragupta.payload['team'] rescue nil
       end
       if not data[:meta].has_key?(:release_version)
@@ -66,10 +66,10 @@ module Chitragupta
 
       data[:log][:id] ||= message["log_id"] rescue nil #TBD
       data[:log][:uuid] = Chitragupta.payload["sessionid"]
-      if not data[:log].has_key?(:kind)
+      if not data[:log].has_key?(:kind) and data[:log][:kind].nil?
         data[:log][:kind] = Chitragupta.payload['kind'] rescue nil
       end
-      if not data[:log].has_key?(:dynamic_data)
+      if not data[:log].has_key?(:dynamic_data) and data[:log][:dynamic_data].nil?
         data[:log][:dynamic_data] = Chitragupta.payload['dynamic_data'] rescue nil
       end
     end
