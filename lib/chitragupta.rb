@@ -24,11 +24,8 @@ module Chitragupta
         def call(env)
             began_at = Time.now
             Chitragupta.payload['rack_logger'] = env.to_json
-            if env['REQUEST_METHOD'] == "GET"
-                Chitragupta.payload['input_params'] = env['QUERY_STRING']
-            else
-                Chitragupta.payload['input_params'] = env['rack.input'].read
-            end
+            request = Rack::Request.new(env)
+            Chitragupta.payload['input_params'] = request.params.to_json
             status, header, body = @app.call(env)
             body = Rack::BodyProxy.new(body) { log(env, status, header, began_at) }
             [status, header, body]
