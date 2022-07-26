@@ -5,6 +5,7 @@ module Chitragupta
     def initialize(*args)
       super(*args)
       @formatter = Chitragupta::JsonLogFormatter.new
+      @progname = @logdev.filename
     end
   end
 end

@@ -24,10 +24,11 @@ module Chitragupta
         def call(env)
             began_at = Time.now
             Chitragupta.payload['rack_logger'] = env.to_json
-            if env['REQUEST_METHOD'] == "GET"
-                Chitragupta.payload['input_params'] = env['QUERY_STRING']
-            else
-                Chitragupta.payload['input_params'] = env['rack.input'].read
+            # Not logging params
+            # if env['REQUEST_METHOD'] == "GET"
+            #     Chitragupta.payload['input_params'] = env['QUERY_STRING']
+            # else
+            #     Chitragupta.payload['input_params'] = env['rack.input'].read
             end
             status, header, body = @app.call(env)
             body = Rack::BodyProxy.new(body) { log(env, status, header, began_at) }
@@ -42,6 +43,7 @@ module Chitragupta
             server_log[:meta] = {}
             server_log[:meta][:file] = @logger.instance_variable_get(:@logdev).filename rescue nil
             server_log[:log] = {}
+            server_log[:log][:dynamic_data] = "End of " + env["REQUEST_PATH"] + " request"
             @logger.info(server_log)
         end
     end

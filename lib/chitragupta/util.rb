@@ -5,11 +5,14 @@ module Chitragupta
   module Util
     extend self
 
-    def sanitize_keys(log_level, timestamp, message)
+    def sanitize_keys(log_level, timestamp, message, filename)
       data = initialize_data(message)
 
       data[:log][:level] = log_level
       data[:meta][:timestamp] = timestamp
+      if not filename.nil?
+        data[:meta][:file] = filename
+      end
 
       return "#{data.to_json.to_s}\n"
     end
@@ -49,7 +52,7 @@ module Chitragupta
 
       data[:meta][:format][:category] = Chitragupta::Categories::SERVER
       data[:meta][:format][:version] = Chitragupta::FormatVersions::SERVER
-      data[:meta][:host] = Socket.gethostname #TBD
+      data[:meta][:hostname] = Socket.gethostname #TBD
 
       if not data[:meta].has_key?(:component) and data[:meta][:component].nil?
         data[:meta][:component] = Chitragupta.payload['component'] rescue nil
@@ -85,14 +88,14 @@ module Chitragupta
 
       data[:meta][:format][:category] = Chitragupta::Categories::PROCESS
       data[:meta][:format][:version] = Chitragupta::FormatVersions::PROCESS
-      data[:meta][:host] = Socket.gethostname
+      data[:meta][:hostname] = Socket.gethostname
     end
 
     # This is not in use as of now
     def populate_worker_data(data, message)
       data[:meta][:format][:category] = Chitragupta::Categories::WORKER
       data[:meta][:format][:version] = Chitragupta::FormatVersions::WORKER
-      data[:meta][:host] = Socket.gethostname
+      data[:meta][:hostname] = Socket.gethostname
 
       data[:data][:thread_id] = Chitragupta::Constants::THREAD_ID_PREFIX + Thread.current.object_id.to_s(36)
       if Thread.current[:sidekiq_context].nil?
