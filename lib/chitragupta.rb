@@ -29,7 +29,7 @@ module Chitragupta
             #     Chitragupta.payload['input_params'] = env['QUERY_STRING']
             # else
             #     Chitragupta.payload['input_params'] = env['rack.input'].read
-            end
+            # end
             status, header, body = @app.call(env)
             body = Rack::BodyProxy.new(body) { log(env, status, header, began_at) }
             [status, header, body]
@@ -38,6 +38,7 @@ module Chitragupta
         def log(env, status, response_headers, began_at)
             now = Time.now
             server_log = {}
+            Chitragupta.payload['rack_logger'] = env.to_json
             server_log[:status] = status.to_s[0..3]
             server_log[:duration] = now - began_at
             server_log[:meta] = {}
