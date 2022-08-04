@@ -1,5 +1,6 @@
 require "socket"
 require "json"
+require "time"
 
 module Chitragupta
   module Util
@@ -9,7 +10,7 @@ module Chitragupta
       data = initialize_data(message)
 
       data[:log][:level] = log_level
-      data[:meta][:timestamp] = timestamp
+      data[:meta][:timestamp] = timestamp.iso8601() rescue timestamp
       if not filename.nil?
         data[:meta][:file] = filename
       end
