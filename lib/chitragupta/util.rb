@@ -114,8 +114,9 @@ module Chitragupta
       if message.is_a?(Hash)
         data[:log] = message[:log] || {}
         data[:meta] = message[:meta] || {}
-        data[:meta][:format][:category] = Chitragupta::Categories::WORKER
-        data[:meta][:format][:version] = Chitragupta::FormatVersions::WORKER
+        data[:meta][:format] ||= {}
+        data[:meta][:format][:category] = Chitragupta::Categories::SERVER
+        data[:meta][:format][:version] = Chitragupta::FormatVersions::SERVER
         data[:meta][:hostname] = Socket.gethostname
       else
         data[:log] = {}
