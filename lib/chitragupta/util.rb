@@ -10,7 +10,7 @@ module Chitragupta
       data = initialize_data(message)
 
       data[:log][:level] = log_level
-      data[:meta][:timestamp] = timestamp.iso8601(4) rescue timestamp
+      data[:meta][:timestamp] = timestamp.iso8601(3) rescue timestamp
       if not filename.nil?
         data[:meta][:file] = filename
       end
