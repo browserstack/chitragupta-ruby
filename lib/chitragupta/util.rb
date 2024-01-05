@@ -35,6 +35,10 @@ module Chitragupta
       return defined?(Rails::Console) && true || false
     end
 
+    def trim_long_string(input_str, limit)
+      return input_str.slice(0, limit)
+    end
+
     private
     def populate_server_data(data, message)
       current_payload = JSON.parse(Chitragupta.payload["rack_logger"])
@@ -46,6 +50,7 @@ module Chitragupta
       data[:data][:request][:id] = current_payload["REQUEST_ID"] rescue nil #TBD
       data[:data][:request][:user_id] = message[:user_id] rescue nil #TBD
       data[:data][:request][:params] = Chitragupta.payload["input_params"].to_s
+      data[:data][:request][:params] = trim_long_string(data[:data][:request][:params], Chitragupta::Constants::FIELD_LENGTH_LIMITS[:params]) rescue nil
       data[:data][:request][:headers] = nil # couldn't find where to put in headers?
 
       data[:data][:response][:status] = message[:status] rescue nil
@@ -75,6 +80,7 @@ module Chitragupta
       end
       if not data[:log].has_key?(:dynamic_data) and data[:log][:dynamic_data].nil?
         data[:log][:dynamic_data] = Chitragupta.payload['dynamic_data'] rescue nil
+        data[:log][:dynamic_data] = trim_long_string(data[:log][:dynamic_data], Chitragupta::Constants::FIELD_LENGTH_LIMITS[:dynamic_data]) rescue nil
       end
     end
 
@@ -122,6 +128,7 @@ module Chitragupta
         data[:log] = {}
         data[:meta] = {}
         data[:log][:dynamic_data] = message.is_a?(String) ? message : message.inspect if message
+        data[:log][:dynamic_data] = trim_long_string(data[:log][:dynamic_data], Chitragupta::Constants::FIELD_LENGTH_LIMITS[:dynamic_data]) rescue nil
       end
 
       data[:meta][:format] ||= {}
