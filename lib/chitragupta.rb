@@ -9,6 +9,9 @@ require "chitragupta/logger"
 require 'rack'
 require 'json'
 
+require 'chitragupta/integrations/puma'
+Chitragupta::Integrations::Puma.install! if Gem.loaded_specs.key?('puma')
+
 module Chitragupta
     extend self
     attr_accessor :payload

@@ -20,7 +20,7 @@ module Chitragupta
 
     def called_as_rack_server?
       # Check if its called using rack up and Rack server is defined to log for rack
-      return Gem.loaded_specs.has_key?('thin')
+      return Gem.loaded_specs.has_key?('thin') || Gem.loaded_specs.has_key?('puma')
     end
 
     def called_as_sidekiq?
